@@ -1,61 +1,46 @@
 package seedu.duke;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.duke.data.Module;
 import seedu.duke.commands.DeleteCommand;
 import seedu.duke.data.ModuleList;
-import seedu.duke.data.Task;
-import seedu.duke.exceptions.ModHappyException;
+import seedu.duke.exceptions.NoSuchModuleException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class IntegrationTest {
 
-    static class TestSystem {
-        private ModuleList moduleList = new ModuleList();
-
-        private TestSystem() {
-            Module testModule = new Module("CS2113T", null, 4);
-            Module testModule2 = new Module("CS2101", null, 4);
-            Task testTask = null;
-            try {
-                testTask = new Task("taskName", "taskDescription", "1h");
-            } catch (ModHappyException e) {
-                fail();
-            }
-            moduleList.addModule(testModule);
-            moduleList.addModule(testModule2);
-            moduleList.getGeneralTasks().addTask(testTask);
+    class ModuleStub extends Module {
+        public ModuleStub(String moduleCode) {
+            super(moduleCode);
         }
 
-        @Test
-        public void deleteModuleWithNoTasks_successfully() {
-            try {
-                TestSystem testSystem = new TestSystem();
-                assertNotNull(testSystem.moduleList.getModule("CS2113T"));
-                DeleteCommand c = new DeleteCommand("CS2113T");
-                c.deleteModule(testSystem.moduleList);
-                assertNull(testSystem.moduleList.getModule("CS2113T"));
-            } catch (ModHappyException e) {
-                fail();
-            }
+        public ModuleStub(String moduleCode, String moduleDescription, int modularCredit) {
+            super(moduleCode, moduleDescription, modularCredit);
         }
+    }
 
-        @Test
-        public void deleteGeneralTask_successfully() {
-            try {
-                TestSystem testSystem = new TestSystem();
-                assertEquals((testSystem.moduleList.getGeneralTasks().getTaskList().size()), 1);
-                DeleteCommand c = new DeleteCommand(0, null);
-                c.deleteTaskFromModule(testSystem.moduleList.getGeneralTasks());
-                assertEquals(testSystem.moduleList.getGeneralTasks().getTaskList().size(), 0);
-            } catch (ModHappyException e) {
-                fail();
-            }
+    class ModuleListStub extends ModuleList {
+
+    }
+
+    @Test
+    public void removeModule_withNoTasks_successfully() {
+        Module testModule = new ModuleStub("cs2113t", "testDescription", 4);
+        ModuleListStub testModuleList = new ModuleListStub();
+        testModuleList.addModule(testModule);
+        assertEquals(testModuleList.getModuleList().get(0), testModule);
+        DeleteCommand c = new DeleteCommand("cs2113t");
+        try {
+            c.deleteModule(testModuleList);
+        } catch (NoSuchModuleException e) {
+            fail();
         }
+        assertNull(testModuleList.getModule("cs2113t"));
     }
 }
