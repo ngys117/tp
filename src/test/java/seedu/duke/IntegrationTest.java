@@ -9,6 +9,7 @@ import seedu.duke.data.Task;
 import seedu.duke.exceptions.ModHappyException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -35,6 +36,7 @@ public class IntegrationTest {
         public void deleteModuleWithNoTasks_successfully() {
             try {
                 TestSystem testSystem = new TestSystem();
+                assertNotNull(testSystem.moduleList.getModule("CS2113T"));
                 DeleteCommand c = new DeleteCommand("CS2113T");
                 c.deleteModule(testSystem.moduleList);
                 assertNull(testSystem.moduleList.getModule("CS2113T"));
@@ -47,6 +49,7 @@ public class IntegrationTest {
         public void deleteGeneralTask_successfully() {
             try {
                 TestSystem testSystem = new TestSystem();
+                assertEquals((testSystem.moduleList.getGeneralTasks().getTaskList().size()), 1);
                 DeleteCommand c = new DeleteCommand(0, null);
                 c.deleteTaskFromModule(testSystem.moduleList.getGeneralTasks());
                 assertEquals(testSystem.moduleList.getGeneralTasks().getTaskList().size(), 0);
