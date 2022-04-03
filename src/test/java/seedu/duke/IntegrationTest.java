@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class UnitTest {
+public class IntegrationTest {
 
     static class TestSystem {
         private ModuleList moduleList = new ModuleList();
